@@ -8,7 +8,7 @@ import java.util.List;
  * Account Manager Class
  */
 public class AccountManager {
-    public static final String accountFile = "accounts.csv";
+    public static final String accountFile = "accounts.txt";
     public static List<Account> accounts = new ArrayList<>();
 
 
