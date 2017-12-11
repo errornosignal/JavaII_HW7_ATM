@@ -1,67 +1,134 @@
-
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ *
+ */
 public class Account {
-    private String name;
+    private String number;
     private String pin;
-    private Double balance;
+    private String balance;
 
+    /**
+     *
+     */
     public Account() {
-    }
+    };
 
-    public static List<Account> accounts = new ArrayList<>();
-
-    public Account(String name, String pin, Double balance) {
-        this.name = name;
+    /**
+     *
+     * @param number
+     * @param pin
+     * @param balance
+     */
+    public Account(String number, String pin, String balance) {
+        this.number = number;
         this.pin = pin;
-        this.balance = balance;
+        this.balance= balance;
+        System.out.println("One account added!");
+        System.out.println("number: " + this.number);
+        System.out.println("pin : " + this.pin);
+        System.out.println("balance: " + this.balance);
+        System.out.println();
     }
 
-    public void setName(String name) {
-        this.name = name;
+//    /**
+//     *
+//     * @param number
+//     * @param pin
+//     * @param balance
+//     */
+//    public Account(String number, String pin, String balance) {
+//        this.number = number;
+//        this.pin = pin;
+//        this.balance= Double.valueOf(balance);
+//    }
+
+    /**
+     *
+     * @param number
+     */
+    public void setNumber(String number) {
+        this.number = number;
     }
 
+    /**
+     *
+     * @param pin
+     */
     public void setPin(String pin) {
         this.pin = pin;
     }
 
-    public void setBalance(Double balance) {
-        this.balance = balance;
+    /**\
+     *
+     * @param bal
+     */
+    public void setBalance(String bal) {
+        this.balance = bal;
     }
 
-    public String getName() {
-        return this.name;
+    /**
+     *
+     * @return
+     */
+    public String getNumber() {
+        return this.number;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPin() {
         return this.pin;
     }
 
-    public Double getBalance() {
+    /**
+     *
+     * @return
+     */
+    public String getBalance() {
         return this.balance;
     }
 
-    public boolean isMatching(String name, String pin) {
-        if (name.equals(getName())) {
-            //System.out.println("nameMatched");
-            if (pin.equals(getPin())) {
-                //System.out.println("passwordMatched");
+    /**
+     *
+     * @param number
+     * @param pin
+     * @return
+     */
+    public boolean isMatching(String number, String pin) {
+        if (this.number.equals(getNumber())) {
+            System.out.println("numberMatched");
+            if (this.pin.equals(getPin())) {
+                System.out.println("passwordMatched");
                 return true;
-            } else {/*System.out.println("pinNotMatched");*/}
-        } else {/*System.out.println("nameNotMatched");*/}
+            } else {System.out.println("pinNotMatched");}
+        } else {System.out.println("numberNotMatched");}
         return false;
     }
 
-    public boolean isMatching(String name) {
-        return name.equals(getName());
+    /**
+     *
+     * @param number
+     * @return
+     */
+    public boolean isMatching(String number) {
+        return number.equals(getNumber());
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
-        return "Account {" + "\n name: " + name + ",\n pin: " + pin  + "\n balance: " + String.valueOf(balance);
+        return "Account {" + "\n number: " + number + ",\n pin: " + pin  + "\n balance: " + String.valueOf(balance);
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -71,12 +138,16 @@ public class Account {
             return false;
         }
         Account account = (Account) o;
-        return (getName() != null ? getName().equals(account.getName()) : account.getName() == null) && (getPin() != null ? getPin().equals(account.getPin()) : account.getPin() == null);
+        return (getNumber() != null ? getNumber().equals(account.getNumber()) : account.getNumber() == null) && (getPin() != null ? getPin().equals(account.getPin()) : account.getPin() == null);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
-        int result = getName() != null ? getName().hashCode() : 0;
+        int result = getNumber() != null ? getNumber().hashCode() : 0;
         result = 31 * result + (getPin() != null ? getPin().hashCode() : 0);
         return result;
     }

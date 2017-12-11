@@ -3,19 +3,43 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class AccountManager {
-    public static List<Account> accounts = new ArrayList<>();
     public static final String accountFile = "accounts.csv";
+    public static List<Account> accounts = new ArrayList<>();
+
 
     public void getAccounts() {
         // read from a source, e.g. database, and return as a List of Account objects
         try {
             CSVReader.readFile(accountFile);
         }
-        catch (MaximumColumnsExceededException | IOException | InterruptedException e) {
+        catch ( IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println(accounts);
     }
+
+    public static void getAccount(String acctNUM, String acctPIN) {
+        //Arrays.fill(new String[]{acctPIN}, "");
+        //simple implementation that loops through the accounts
+        for (int i = 0; i < accounts.size(); i++) {
+            //System.out.println(accounts.get(i).getNumber());
+            if (accounts.get(i).isMatching(acctNUM, acctPIN)) {
+                System.out.println(accounts.get(i).getNumber());
+            }
+        }
+    }
+
+    public static void getBalance(String accountName, String pin) {
+        for (Account account : accounts) {
+            //System.out.println(account.getName());
+            if (account.isMatching(accountName, pin)) {
+                System.out.println(account.getBalance());
+            }
+        }
+    }
+}
 
        // Account account = new Account();
 
@@ -94,28 +118,4 @@ public class AccountManager {
 //        }
 //        return null;
 //    }
-
-
-    public static Account getAccount(String accountName, String pin) {
-        //Arrays.fill(new String[]{password}, " ");
-        //simple implementation that loops through the accounts
-        for (Account account : accounts) {
-            System.out.println(account.getName());
-            if (account.isMatching(accountName, pin)) {
-                System.out.println(account);
-            }
-        }
-        return null;
-    }
-
-    public static Double getBalance(String accountName, String pin) {
-        for (Account account : accounts) {
-            //System.out.println(account.getName());
-            if (account.isMatching(accountName, pin)) {
-                System.out.println(account.getBalance());
-                return account.getBalance();
-            }
-        }
-        return null;
-    }
-}
+//}

@@ -1,184 +1,169 @@
 
 import java.io.*;
+import java.util.*;
 
-/** Created by errornosignal on 3/3/2017.
- * ReidNolan_HW2_[CSVReader]_[PROG_2413]
+/** Created by errornosignal on 4/7/2017.
+ * Reid_Nolan_HW5_[CSVReader]_[PROG 1403]
  * CSVReader Class
+ * Class for reading data stored in a .csv file
  * @author Reid Nolan
  * @since 04/07/2017
- * @version 1.0
+ * @version 1.01
  */
 class CSVReader
 {
+    //declare and initialize class variables
+    final static int kTIMER_DELAY = 250;
+    private static List<Account> accounts = AccountDAOimpl.accounts;
+    private static AccountDAO accountDAO = new AccountDAOimpl();
+
     /**
      * reads file into memory and parses data
-     *
-     * @param fileToOpen fileToOpen
-     * @throws MaximumColumnsExceededException MCEEx
-     * @throws IOException                     IOEx
-     * @throws InterruptedException            IEx
+     * @throws FileNotFoundException FNFEx
+     * @throws InterruptedException IEx
+     * @param accountFile accountFIle
      */
-    static void readFile(String fileToOpen) throws MaximumColumnsExceededException, IOException, InterruptedException {
-        String csvFile = "accounts.csv";
-        BufferedReader br = null;
-        String line = "";
-        String cvsSplitBy = ",";
-
-        try {
-            br = new BufferedReader(new FileReader(csvFile));
-            while ((line = br.readLine()) != null) {
-
-                // use comma as separator
-                String[] str = line.split(cvsSplitBy);
-                Account account = new Account(str[0], str[1], Double.valueOf(str[2]));
-
-                //add key-value pair to map
-                Account.accounts.add(account);
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-//        //initialize counter for rows
-//        int kTIMER_DELAY = 250;
-//        //Account account = new Account();
-//        lineCount = 0;
-//
-//        //try/catch block
-//        try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(fileToOpen))))
-//        {
-//            //specify delimiter
-//            scanner.useDelimiter(",");
-//
-//            //get input until end of file
-//            while (scanner.hasNext())
-//            {
-//                String s3 = scanner.next();
-//                System.out.println("s3: " + s3);
-//
-//                String s2 = scanner.next();
-//                System.out.println("s2: " + s2);
-//
-//                //add next line to string
-//                String s1 = scanner.nextLine();
-//                System.out.println("s1: " + s1);
-//
-////                //split string into separate elements, preserving protected fields, and add to array
-////                String[] s1_string = s1.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-////
-////                //remove leading and trailing double quotes from string, preserving internal double quotes and commas
-////                for (int i = 0; i < s1_string.length; i++)
-////                {
-////                    if (s1_string[i].startsWith("\""))
-////                    {
-////                        s1_string[i] = s1_string[i].substring(1, s1_string[i].length());
-////                        System.out.print(Arrays.toString(s1_string));
-////
-////                    }
-////                    else
-////                    {
-////                        //doNothing()
-////                    }
-////                    if (s1_string[i].endsWith("\""))
-////                    {
-////                        s1_string[i] = s1_string[i].substring(0, s1_string[i].length() - 1);
-////                        System.out.print(Arrays.toString(s1_string));
-////                    }
-////                    else
-////                    {
-////                        //doNothing()
-////                    }
-////                }
-////
-////                //throw custom exception for max columns exceeded
-////                if (s1_string.length > MaximumColumnsExceededException.get_kMAX_COLUMNS())
-////                {
-////                    throw new MaximumColumnsExceededException();
-////                }
-////                else
-////                {
-////                    //doNothing()
-////                }
-//
-//
-//                String x = s1;
-//                System.out.println("x: " + x);
-//
-//                Account account = new Account(s3, s2, Double.valueOf(s1));
-//
-//
-//                //add key-value pair to map
-//                Account.accounts.add(account);
-//                System.out.println(account);
-//
-//                //increment line count
-//                lineCount++;
-//            }
-//            //close input file
-//            scanner.close();
-//            //displays file read successfully status message
-//            displayFileReadConfirmation();
-//        }
-////        catch (MaximumColumnsExceededException MCEEx)
-////        {
-////            //display error for thrown exception
-////            System.err.println(MCEEx.getMessage());
-////            Thread.sleep(kTIMER_DELAY);
-////            System.out.println();
-////        }
-//    }
-
-    /**
-     * prints formatted file contents to console
-     */
-//    static void printFile()
-//    {
-//        //test for data in memory
-//        if (lineCount > 0)
-//        {
-//            //display file data formatted with header
-//            displayDataOutputHeader();
-//            System.out.println("//Beginning of file//");
-//            for (Map.Entry entry : treeMap.entrySet())
-//            {
-//                System.out.print(String.format("%-20s", entry.getKey()));
-//                System.out.print(String.format("%-14s", entry.getValue()));
-//                System.out.print("\n");
-//            }
-//
-//            System.out.println("//End of file//");
-//            System.out.println();
-//        }
-//        else
-//        {
-//            //display message for no data in memory
-//            displayNoData();
-//        }
-//    }
-
-    /**
-     * displays no data in memory status message
-     */
-    private static void displayNoData()
+    static void readFile(String accountFile) throws FileNotFoundException, InterruptedException
     {
-        System.out.println("\n" + "Error! No data exists in memory.");
+        //set counter for parsing string elements
+        int elementCount = 0;
+
+        try (Scanner input = new Scanner(new BufferedReader(new FileReader(ATM.fileToOpen))))
+        {
+            //set delimiter
+            input.useDelimiter(" ");
+
+            //read file until no lines left to read
+            while (input.hasNextLine())
+            {
+                //declare and initialize local variables
+                String number = "";
+                String pin = "";
+                String balance = "";
+
+                //set next line in file to string variable
+                String s1 = input.nextLine();
+
+                //split string elements and place in array
+                String[] s1_string = s1.split("\\s+");
+
+                //throw custom exception of mal-formatted file
+                if (s1_string.length > MaximumColumnsExceededException.get_kMAX_COLUMNS())
+                {
+                    throw new MaximumColumnsExceededException();
+                }
+                else
+                {
+                    //do nothing
+                }
+
+                //loop through string elements and set to variables
+                for (String element : s1_string)
+                {
+                    while (elementCount >= 3)
+                    {
+                        elementCount = 0;
+                    }
+
+                    if (elementCount == 0)
+                    {
+                        number = element;
+                        elementCount++;
+                    }
+                    else if (elementCount == 1)
+                    {
+                        pin = element;
+                        elementCount++;
+                    }
+                    else if (elementCount == 2)
+                        {
+                            balance = element;
+                            elementCount++;
+                        }
+                        else
+                        {
+                            elementCount = 0;
+                        }
+                }
+
+                //add new account object to list
+                Account account= new Account(number, pin, balance);
+                accounts.add(account);
+            }
+
+            //close file and display file read confirmation message
+            input.close();
+            displayFileReadConfirmation(ATM.fileToOpen);
+        }
+        catch (MaximumColumnsExceededException MCEEx)
+        {
+            //display error on thrown custom exception
+            System.err.println(MCEEx.getMessage());
+            Thread.sleep(kTIMER_DELAY);
+            System.out.println();
+        }
     }
 
     /**
      * displays file read successfully status message
+     * @param fileToOpen file to open
      */
-    private static void displayFileReadConfirmation()
+    private static void displayFileReadConfirmation(String fileToOpen)
     {
-        System.out.println("\n" + "The selected file has been successfully read." + "\n");
+        System.out.println("[" + fileToOpen + "] has been successfully read.");
     }
 
     /**
-     * displays data output header
+     * writes contents of memory to file
+     * @param fileToOpen fileToOpen
+     * @throws InterruptedException IOEx
      */
-    private static void displayDataOutputHeader()
+    static void writeToFile(String fileToOpen) throws InterruptedException
     {
-        System.out.println("\n" + "The file contains the following data:");
+        BufferedWriter bufferedWriter = null;
+        FileWriter fileWriter = null;
+
+        try
+        {
+            fileWriter = new FileWriter(fileToOpen, false);
+            bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write("");
+
+            //write account records stored in memory to file
+            for (Account account : accountDAO.getAllAccounts())
+            {
+                bufferedWriter.write(accountDAO.printAccountDetails(account)+ "\n");
+            }
+
+            //display successful write to file message
+            System.out.println("Changes were saved to [" + fileToOpen + "]");
+        }
+        catch (IOException IOEx)
+        {
+            System.err.println(IOEx.getMessage());
+            Thread.sleep(kTIMER_DELAY);
+            System.out.println();
+        }
+        finally
+        {
+            try
+            {
+                //close file
+                if (bufferedWriter != null)
+                {
+                    bufferedWriter.close();
+                }
+                if (fileWriter != null)
+                {
+                    fileWriter.close();
+                }
+            }
+            catch (IOException IOEx)
+            {
+                System.err.println(IOEx.getMessage());
+                Thread.sleep(kTIMER_DELAY);
+                System.out.println();
+            }
+        }
     }
 }
